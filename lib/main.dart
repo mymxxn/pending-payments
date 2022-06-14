@@ -482,33 +482,12 @@ class _PendingpaymentState extends State<Pendingpayment> {
                                 }
                                 setState(() {
                                   userInputItem.forEach((element) {
-                                    print(" talha code ${element.name}");
-                                    // if (selectedpendingfee.contains(index)) {
-                                    //   totalpayableamnt = totalpayableamnt +
-                                    //       int.parse(element.name);
-                                    // } else {
-                                    //   totalpayableamnt = totalpayableamnt -
-                                    //       int.parse(element.name);
-                                    // }
-                                  });
-                                  for (var i = 0;
-                                      i < userInputItem.length;
-                                      i++) {
-                                    print(
-                                        "1st    answer ${userInputItem[i].name}");
-
                                     if (selectedpendingfee.contains(index)) {
                                       totalpayableamnt = totalpayableamnt +
-                                          int.parse(userInputItem[i].name);
-                                    } else {
-                                      // totalpayableamnt = totalpayableamnt +
-                                      //     int.parse(userInputItem[1].name);
-                                      //   totalpayableamnt = totalpayableamnt +
-                                      //       int.parse(userInputItem[1].name);
+                                          int.parse(element.name);
+                                      print("code $totalpayableamnt");
                                     }
-                                  }
-                                  //   // // showtextpayfield = true;
-                                  //   // print("mmmmm ${payableamntcontroller.value}");
+                                  });
                                 });
                               },
                               checkColor: Colors.white,
