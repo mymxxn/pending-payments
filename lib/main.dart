@@ -20,8 +20,7 @@ class Pendingpayment extends StatefulWidget {
 
 class _PendingpaymentState extends State<Pendingpayment> {
   List<TextEditingController> _paycontrollers = [];
-  List<TextEditingController> _finecontrollers = [];
-  List<TextEditingController> _discountcontrollers = [];
+
   var sf = 0;
   String? payment;
   // final _formKey = GlobalKey<FormState>();
@@ -40,20 +39,16 @@ class _PendingpaymentState extends State<Pendingpayment> {
   var totalpayableamnt = 0;
   var totalfineamnt = 0;
   var totaldiscountamnt = 0;
+  bool showtextpayfield = false;
 
-  // @override
-  // void dispose() {
-  //   for (final payableamntcontroller in _paycontrollers) {
-  //     payableamntcontroller.dispose();
-  //   }
-  //   for (final fineamntcontroller in _finecontrollers) {
-  //     fineamntcontroller.dispose();
-  //   }
-  //   for (final discountamntcontroller in _discountcontrollers) {
-  //     discountamntcontroller.dispose();
-  //   }
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    for (final payableamntcontroller in _paycontrollers) {
+      payableamntcontroller.dispose();
+    }
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,14 +115,42 @@ class _PendingpaymentState extends State<Pendingpayment> {
                           shrinkWrap: true,
                           itemCount: list.data!.pendingFees!.length,
                           itemBuilder: (context, index) {
+                            print("object");
                             final payableamntcontroller =
                                 TextEditingController();
 
-                            final fineamntcontroller = TextEditingController();
-                            final discountamntcontroller =
-                                TextEditingController();
+                            _paycontrollers.add(payableamntcontroller);
+
                             print("sum $totalfeeamnt");
                             return CheckboxListTile(
+                              value: selectedpendingfee.contains(index),
+                              onChanged: (value) {
+                                if (selectedpendingfee.contains(index)) {
+                                  selectedpendingfee.remove(index); // unselect
+                                  totalfeeamnt = totalfeeamnt -
+                                      int.parse(
+                                          "${list.data!.pendingFees![index].feeAmount}");
+                                  showtextpayfield = false;
+                                  // totalpayableamnt = totalpayableamnt -
+                                  //     int.parse(
+                                  //         "${payableamntcontroller.value}");
+                                } else {
+                                  selectedpendingfee.add(index); // select
+                                  showtextpayfield = true;
+                                  totalfeeamnt = totalfeeamnt +
+                                      int.parse(
+                                          "${list.data!.pendingFees![index].feeAmount}");
+
+                                  // totalpayableamnt = totalpayableamnt +
+                                  //     int.parse(
+                                  //         "${payableamntcontroller.value}");
+                                  print("byetch $totalpayableamnt");
+                                }
+                                setState(() {
+                                  // // showtextpayfield = true;
+                                  print("mmmmm ${payableamntcontroller.value}");
+                                });
+                              },
                               controlAffinity: ListTileControlAffinity.leading,
                               title: Column(
                                 children: [
@@ -225,11 +248,9 @@ class _PendingpaymentState extends State<Pendingpayment> {
                                           children: [
                                             TextFormField(
                                               controller: payableamntcontroller,
-                                              // keyboardType:
-                                              //     isKeyboardShowing
-                                              //         ? TextInputType.none
-                                              //         : TextInputType
-                                              //             .text,
+                                              keyboardType: showtextpayfield
+                                                  ? TextInputType.number
+                                                  : TextInputType.none,
                                               cursorColor: Colors.grey,
                                               validator: (value) {
                                                 if (value == null) {
@@ -258,7 +279,7 @@ class _PendingpaymentState extends State<Pendingpayment> {
                                               height: 5,
                                             ),
                                             TextField(
-                                              controller: fineamntcontroller,
+                                              // controller: fineamntcontroller,
                                               // keyboardType:
                                               //     isKeyboardShowing
                                               //         ? TextInputType.none
@@ -427,7 +448,7 @@ class _PendingpaymentState extends State<Pendingpayment> {
                                     children: [
                                       if (shoulShowInput == true)
                                         TextField(
-                                          controller: discountamntcontroller,
+                                          // controller: discountamntcontroller,
                                           // keyboardType: isKeyboardShowing
                                           //     ? TextInputType.none
                                           //     : TextInputType.text,
@@ -450,34 +471,6 @@ class _PendingpaymentState extends State<Pendingpayment> {
                                   ),
                                 ],
                               ),
-                              value: selectedpendingfee.contains(index),
-                              onChanged: (value) {
-                                if (selectedpendingfee.contains(index)) {
-                                  selectedpendingfee.remove(index); // unselect
-                                  totalfeeamnt = totalfeeamnt -
-                                      int.parse(
-                                          "${list.data!.pendingFees![index].feeAmount}");
-                                } else {
-                                  selectedpendingfee.add(index); // select
-                                  totalfeeamnt = totalfeeamnt +
-                                      int.parse(
-                                          "${list.data!.pendingFees![index].feeAmount}");
-                                }
-                                setState(() {
-                                  _paycontrollers.add(payableamntcontroller);
-                                  _finecontrollers.add(fineamntcontroller);
-                                  _discountcontrollers
-                                      .add(discountamntcontroller);
-                                  totalpayableamnt = totalpayableamnt +
-                                      int.parse(
-                                          "${payableamntcontroller.value}");
-                                  totalfineamnt = totalfineamnt +
-                                      int.parse("${fineamntcontroller.value}");
-                                  totaldiscountamnt = totaldiscountamnt +
-                                      int.parse(
-                                          "${discountamntcontroller.value}");
-                                });
-                              },
                               checkColor: Colors.white,
                               activeColor: Colors.blue,
                             );
