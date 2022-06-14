@@ -19,7 +19,9 @@ class Pendingpayment extends StatefulWidget {
 }
 
 class _PendingpaymentState extends State<Pendingpayment> {
-  List<TextEditingController> _paycontrollers = [];
+  // List<TextEditingController> _paycontrollers = [];
+  // List<TextEditingController>? _controllers = [];
+  List<Item> userInputItem = [];
 
   var sf = 0;
   String? payment;
@@ -39,16 +41,22 @@ class _PendingpaymentState extends State<Pendingpayment> {
   var totalpayableamnt = 0;
   var totalfineamnt = 0;
   var totaldiscountamnt = 0;
-  bool showtextpayfield = false;
+  // bool showtextpayfield = false;
 
-  @override
-  void dispose() {
-    for (final payableamntcontroller in _paycontrollers) {
-      payableamntcontroller.dispose();
-    }
-
-    super.dispose();
+  void takeNumber(String text, String itemId) {
+    try {
+      userInputItem.add(Item(itemId, text));
+    } on FormatException {}
   }
+
+  // @override
+  // void dispose() {
+  //   for (final payableamntcontroller in _paycontrollers) {
+  //     payableamntcontroller.dispose();
+  //   }
+
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +67,7 @@ class _PendingpaymentState extends State<Pendingpayment> {
             builder: (context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.hasData) {
                 Stdpendingpaymentsmodel list = snapshot.data;
+
                 print("yeaah");
                 return SingleChildScrollView(
                   scrollDirection: Axis.vertical,
@@ -115,42 +124,14 @@ class _PendingpaymentState extends State<Pendingpayment> {
                           shrinkWrap: true,
                           itemCount: list.data!.pendingFees!.length,
                           itemBuilder: (context, index) {
+                            PendingFees item = list.data!.pendingFees![index];
+                            //  _controllers!.add(new TextEditingController());
                             print("object");
-                            final payableamntcontroller =
-                                TextEditingController();
 
-                            _paycontrollers.add(payableamntcontroller);
+                            // _paycontrollers.add(payableamntcontroller);
 
                             print("sum $totalfeeamnt");
                             return CheckboxListTile(
-                              value: selectedpendingfee.contains(index),
-                              onChanged: (value) {
-                                if (selectedpendingfee.contains(index)) {
-                                  selectedpendingfee.remove(index); // unselect
-                                  totalfeeamnt = totalfeeamnt -
-                                      int.parse(
-                                          "${list.data!.pendingFees![index].feeAmount}");
-                                  showtextpayfield = false;
-                                  // totalpayableamnt = totalpayableamnt -
-                                  //     int.parse(
-                                  //         "${payableamntcontroller.value}");
-                                } else {
-                                  selectedpendingfee.add(index); // select
-                                  showtextpayfield = true;
-                                  totalfeeamnt = totalfeeamnt +
-                                      int.parse(
-                                          "${list.data!.pendingFees![index].feeAmount}");
-
-                                  // totalpayableamnt = totalpayableamnt +
-                                  //     int.parse(
-                                  //         "${payableamntcontroller.value}");
-                                  print("byetch $totalpayableamnt");
-                                }
-                                setState(() {
-                                  // // showtextpayfield = true;
-                                  print("mmmmm ${payableamntcontroller.value}");
-                                });
-                              },
                               controlAffinity: ListTileControlAffinity.leading,
                               title: Column(
                                 children: [
@@ -247,10 +228,15 @@ class _PendingpaymentState extends State<Pendingpayment> {
                                         Column(
                                           children: [
                                             TextFormField(
-                                              controller: payableamntcontroller,
-                                              keyboardType: showtextpayfield
-                                                  ? TextInputType.number
-                                                  : TextInputType.none,
+                                              // controller: payableamntcontroller,
+                                              onChanged: (text) {
+                                                takeNumber(text,
+                                                    "${item.pendingAmount}");
+                                              },
+                                              keyboardType:
+                                                  //showtextpayfield
+                                                  TextInputType.number,
+                                              // : TextInputType.none,
                                               cursorColor: Colors.grey,
                                               validator: (value) {
                                                 if (value == null) {
@@ -278,7 +264,7 @@ class _PendingpaymentState extends State<Pendingpayment> {
                                             SizedBox(
                                               height: 5,
                                             ),
-                                            TextField(
+                                            TextFormField(
                                               // controller: fineamntcontroller,
                                               // keyboardType:
                                               //     isKeyboardShowing
@@ -471,6 +457,60 @@ class _PendingpaymentState extends State<Pendingpayment> {
                                   ),
                                 ],
                               ),
+                              value: selectedpendingfee.contains(index),
+                              onChanged: (value) {
+                                if (selectedpendingfee.contains(index)) {
+                                  selectedpendingfee.remove(index); // unselect
+                                  totalfeeamnt = totalfeeamnt -
+                                      int.parse(
+                                          "${list.data!.pendingFees![index].feeAmount}");
+                                  // showtextpayfield = false;
+                                  // totalpayableamnt = totalpayableamnt -
+                                  //     int.parse(
+                                  //         "${payableamntcontroller.value}");
+                                } else {
+                                  selectedpendingfee.add(index); // select
+                                  // showtextpayfield = true;
+                                  totalfeeamnt = totalfeeamnt +
+                                      int.parse(
+                                          "${list.data!.pendingFees![index].feeAmount}");
+
+                                  // totalpayableamnt = totalpayableamnt +
+                                  //     int.parse(
+                                  //         "${payableamntcontroller.value}");
+
+                                }
+                                setState(() {
+                                  userInputItem.forEach((element) {
+                                    print(" talha code ${element.name}");
+                                    // if (selectedpendingfee.contains(index)) {
+                                    //   totalpayableamnt = totalpayableamnt +
+                                    //       int.parse(element.name);
+                                    // } else {
+                                    //   totalpayableamnt = totalpayableamnt -
+                                    //       int.parse(element.name);
+                                    // }
+                                  });
+                                  for (var i = 0;
+                                      i < userInputItem.length;
+                                      i++) {
+                                    print(
+                                        "1st    answer ${userInputItem[i].name}");
+
+                                    if (selectedpendingfee.contains(index)) {
+                                      totalpayableamnt = totalpayableamnt +
+                                          int.parse(userInputItem[i].name);
+                                    } else {
+                                      // totalpayableamnt = totalpayableamnt +
+                                      //     int.parse(userInputItem[1].name);
+                                      //   totalpayableamnt = totalpayableamnt +
+                                      //       int.parse(userInputItem[1].name);
+                                    }
+                                  }
+                                  //   // // showtextpayfield = true;
+                                  //   // print("mmmmm ${payableamntcontroller.value}");
+                                });
+                              },
                               checkColor: Colors.white,
                               activeColor: Colors.blue,
                             );
@@ -478,7 +518,7 @@ class _PendingpaymentState extends State<Pendingpayment> {
                       Column(
                         children: [
                           if (flag == sf)
-                            totalpending("$totalfeeamnt", "1000", "5500"),
+                            totalpending("$totalpayableamnt", "1000", "5500"),
                         ],
                       ),
                       Row(
@@ -810,3 +850,9 @@ Widget pendpaytitle() {
 //   c = a + b;
 //   print("Result:$c");
 // }
+class Item {
+  final String id;
+  final String name;
+
+  Item(this.id, this.name);
+}
