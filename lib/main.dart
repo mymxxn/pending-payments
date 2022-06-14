@@ -21,16 +21,16 @@ class Pendingpayment extends StatefulWidget {
 class _PendingpaymentState extends State<Pendingpayment> {
   // List<TextEditingController> _paycontrollers = [];
   // List<TextEditingController>? _controllers = [];
-  List<Item> userInputItem = [];
+  // List<Item> userInputItem = [];
 
   var sf = 0;
   String? payment;
   // final _formKey = GlobalKey<FormState>();
   final selectedpendingfee = [];
-  final payable = [];
+  // final payable = [];
   var selecteddiscoscholar = false;
   int flag = 0;
-  int selectedvalue = 0;
+  // int selectedvalue = 0;
   List<dynamic> payments = ["Cash", "Bank"];
   List<dynamic> scholarship = ["Discount", "Scholarship"];
   bool shoulShowInput = false;
@@ -43,11 +43,16 @@ class _PendingpaymentState extends State<Pendingpayment> {
   var totaldiscountamnt = 0;
   // bool showtextpayfield = false;
 
-  void takeNumber(String text, String itemId) {
-    try {
-      userInputItem.add(Item(itemId, text));
-    } on FormatException {}
-  }
+  // void takeNumber(String text, String itemId) {
+  //   try {
+  //     Item item = Item(itemId, text);
+  //     for (var i = 0; i < userInputItem.length; i++) {
+  //       if (userInputItem[i].id == itemId) {
+  //         userInputItem.add(Item(itemId, text));
+  //       }
+  //     }
+  //   } on FormatException {}
+  // }
 
   // @override
   // void dispose() {
@@ -125,6 +130,7 @@ class _PendingpaymentState extends State<Pendingpayment> {
                           itemCount: list.data!.pendingFees!.length,
                           itemBuilder: (context, index) {
                             PendingFees item = list.data!.pendingFees![index];
+
                             //  _controllers!.add(new TextEditingController());
                             print("object");
 
@@ -230,8 +236,9 @@ class _PendingpaymentState extends State<Pendingpayment> {
                                             TextFormField(
                                               // controller: payableamntcontroller,
                                               onChanged: (text) {
-                                                takeNumber(text,
-                                                    "${item.pendingAmount}");
+                                                // takeNumber(text,
+                                                //     "${item.pa}");
+                                                item.payable = int.parse(text);
                                               },
                                               keyboardType:
                                                   //showtextpayfield
@@ -271,6 +278,9 @@ class _PendingpaymentState extends State<Pendingpayment> {
                                               //         ? TextInputType.none
                                               //         : TextInputType
                                               //             .text,
+                                              onChanged: (text) {
+                                                item.fine = int.parse(text);
+                                              },
                                               cursorColor: Colors.grey,
                                               decoration: InputDecoration(
                                                 hintText: "Enter Fine amount",
@@ -435,8 +445,10 @@ class _PendingpaymentState extends State<Pendingpayment> {
                                       if (shoulShowInput == true)
                                         TextField(
                                           // controller: discountamntcontroller,
-                                          // keyboardType: isKeyboardShowing
-                                          //     ? TextInputType.none
+                                          keyboardType:
+                                              // isKeyboardShowing
+                                              //     ?
+                                              TextInputType.number,
                                           //     : TextInputType.text,
                                           cursorColor: Colors.grey,
                                           decoration: InputDecoration(
@@ -464,6 +476,11 @@ class _PendingpaymentState extends State<Pendingpayment> {
                                   totalfeeamnt = totalfeeamnt -
                                       int.parse(
                                           "${list.data!.pendingFees![index].feeAmount}");
+
+                                  totalpayableamnt =
+                                      totalpayableamnt - item.payable!;
+                                  totalfineamnt = totalfineamnt - item.fine!;
+
                                   // showtextpayfield = false;
                                   // totalpayableamnt = totalpayableamnt -
                                   //     int.parse(
@@ -474,20 +491,32 @@ class _PendingpaymentState extends State<Pendingpayment> {
                                   totalfeeamnt = totalfeeamnt +
                                       int.parse(
                                           "${list.data!.pendingFees![index].feeAmount}");
-
+                                  totalpayableamnt =
+                                      totalpayableamnt + item.payable!;
+                                  totalfineamnt = totalfineamnt + item.fine!;
                                   // totalpayableamnt = totalpayableamnt +
                                   //     int.parse(
                                   //         "${payableamntcontroller.value}");
 
                                 }
                                 setState(() {
-                                  userInputItem.forEach((element) {
-                                    if (selectedpendingfee.contains(index)) {
-                                      totalpayableamnt = totalpayableamnt +
-                                          int.parse(element.name);
-                                      print("code $totalpayableamnt");
-                                    }
-                                  });
+                                  //  if (selectedpendingfee.contains(index)) {}
+                                  // for (var i = 0;
+                                  //     i < userInputItem.length;
+                                  //     i++) {
+                                  //   if (selectedpendingfee.contains(index)) {
+                                  //     print("code 1st $totalpayableamnt");
+                                  //     // totalpayableamnt = totalpayableamnt +
+                                  //     //     int.parse(userInputItem[i].name);
+                                  //     print(
+                                  //         "code element ${userInputItem[i].name}");
+
+                                  // print("code total $totalpayableamnt");
+                                  //   }
+                                  // }
+                                  // userInputItem.forEach((element) {
+
+                                  // });
                                 });
                               },
                               checkColor: Colors.white,
@@ -497,7 +526,8 @@ class _PendingpaymentState extends State<Pendingpayment> {
                       Column(
                         children: [
                           if (flag == sf)
-                            totalpending("$totalpayableamnt", "1000", "5500"),
+                            totalpending(
+                                "$totalpayableamnt", "$totalfineamnt", "5500"),
                         ],
                       ),
                       Row(
