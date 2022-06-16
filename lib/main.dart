@@ -130,6 +130,7 @@ class _PendingpaymentState extends State<Pendingpayment> {
                           itemCount: list.data!.pendingFees!.length,
                           itemBuilder: (context, index) {
                             PendingFees item = list.data!.pendingFees![index];
+                            item.payable = 0;
 
                             //  _controllers!.add(new TextEditingController());
                             print("object");
@@ -376,21 +377,21 @@ class _PendingpaymentState extends State<Pendingpayment> {
                                       ],
                                     ),
                                   ),
-//  value: selectedpendingfee.contains(index),
-//                               onChanged: (value) {
-//                                 if (selectedpendingfee.contains(index)) {
-//                                   selectedpendingfee.remove(index); // unselect
-//                                   totalfeeamnt = totalfeeamnt -
-//                                       int.parse(
-//                                           "${list.data!.pendingFees![index].feeAmount}");
-//                                 } else {
-//                                   selectedpendingfee.add(index); // select
-//                                   totalfeeamnt = totalfeeamnt +
-//                                       int.parse(
-//                                           "${list.data!.pendingFees![index].feeAmount}");
-//                                 }
-//                                 setState(() {});
-//                               },
+                                  // value: selectedpendingfee.contains(index),
+                                  // onChanged: (value) {
+                                  //   if (selectedpendingfee.contains(index)) {
+                                  //     selectedpendingfee.remove(index); // unselect
+                                  //     totalfeeamnt = totalfeeamnt -
+                                  //         int.parse(
+                                  //             "${list.data!.pendingFees![index].feeAmount}");
+                                  //   } else {
+                                  //     selectedpendingfee.add(index); // select
+                                  //     totalfeeamnt = totalfeeamnt +
+                                  //         int.parse(
+                                  //             "${list.data!.pendingFees![index].feeAmount}");
+                                  //   }
+                                  //   setState((){});
+                                  // },
                                   // Row(
                                   //   mainAxisAlignment: MainAxisAlignment.start,
                                   //   children: [
@@ -478,8 +479,8 @@ class _PendingpaymentState extends State<Pendingpayment> {
                                           "${list.data!.pendingFees![index].feeAmount}");
 
                                   totalpayableamnt =
-                                      totalpayableamnt - item.payable!;
-                                  totalfineamnt = totalfineamnt - item.fine!;
+                                      totalpayableamnt - item.payable;
+                                  // totalfineamnt = totalfineamnt - item.fine;
 
                                   // showtextpayfield = false;
                                   // totalpayableamnt = totalpayableamnt -
@@ -492,32 +493,14 @@ class _PendingpaymentState extends State<Pendingpayment> {
                                       int.parse(
                                           "${list.data!.pendingFees![index].feeAmount}");
                                   totalpayableamnt =
-                                      totalpayableamnt + item.payable!;
-                                  totalfineamnt = totalfineamnt + item.fine!;
+                                      totalpayableamnt + item.payable;
+                                  // totalfineamnt = totalfineamnt + item.fine;
                                   // totalpayableamnt = totalpayableamnt +
                                   //     int.parse(
                                   //         "${payableamntcontroller.value}");
 
                                 }
-                                setState(() {
-                                  //  if (selectedpendingfee.contains(index)) {}
-                                  // for (var i = 0;
-                                  //     i < userInputItem.length;
-                                  //     i++) {
-                                  //   if (selectedpendingfee.contains(index)) {
-                                  //     print("code 1st $totalpayableamnt");
-                                  //     // totalpayableamnt = totalpayableamnt +
-                                  //     //     int.parse(userInputItem[i].name);
-                                  //     print(
-                                  //         "code element ${userInputItem[i].name}");
-
-                                  // print("code total $totalpayableamnt");
-                                  //   }
-                                  // }
-                                  // userInputItem.forEach((element) {
-
-                                  // });
-                                });
+                                setState(() {});
                               },
                               checkColor: Colors.white,
                               activeColor: Colors.blue,

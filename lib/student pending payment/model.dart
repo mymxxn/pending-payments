@@ -63,22 +63,21 @@ class PendingFees {
   String? pendingAmount;
   String? fineAmount;
   String? feeCompleted;
-  int? payable;
-  int? fine;
+  late int payable;
+  late int fine;
 
-  PendingFees(
-      {this.courseFeeId,
-      this.feeName,
-      this.installSNo,
-      this.feeAmount,
-      this.feeType,
-      this.dueDate,
-      this.sopId,
-      this.pendingAmount,
-      this.fineAmount,
-      this.feeCompleted,
-      this.payable,
-      this.fine});
+  PendingFees({
+    this.courseFeeId,
+    this.feeName,
+    this.installSNo,
+    this.feeAmount,
+    this.feeType,
+    this.dueDate,
+    this.sopId,
+    this.pendingAmount,
+    this.fineAmount,
+    this.feeCompleted,
+  });
 
   PendingFees.fromJson(Map<String, dynamic> json) {
     courseFeeId = json['course_fee_id'];
@@ -91,8 +90,6 @@ class PendingFees {
     pendingAmount = json['pending_amount'];
     fineAmount = json['fine_amount'];
     feeCompleted = json['fee_completed'];
-    payable = json['payable'];
-    fine = json['fine'];
   }
 
   Map<String, dynamic> toJson() {
@@ -107,8 +104,7 @@ class PendingFees {
     data['pending_amount'] = this.pendingAmount;
     data['fine_amount'] = this.fineAmount;
     data['fee_completed'] = this.feeCompleted;
-    data['payable'] = this.payable;
-    data['fine'] = this.fine;
+
     return data;
   }
 }
